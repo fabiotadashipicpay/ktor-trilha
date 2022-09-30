@@ -25,7 +25,11 @@ fun Route.customerRouting() {
                 text = "Missing id",
                 status = HttpStatusCode.BadRequest
             )
-            call.respond(status = HttpStatusCode.OK, message = customerList.first { it.id == id })
+            val customer = customerList.firstOrNull { it.id == id } ?: return@get call.respondText(
+                text = "Not Found",
+                status = HttpStatusCode.NotFound
+            )
+            call.respond(status = HttpStatusCode.OK, message = customer)
         }
         post {
             val customer = call.receive<CustomerDTO>()
