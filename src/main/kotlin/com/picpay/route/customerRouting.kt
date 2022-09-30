@@ -1,14 +1,16 @@
 package com.picpay.route
 
 import com.picpay.dto.CustomerDTO
+import com.picpay.service.CustomerService
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import io.ktor.util.reflect.*
+import org.koin.ktor.ext.inject
 
 fun Route.customerRouting() {
+    val service by inject<CustomerService>()
 
     val customerList = arrayListOf(
         CustomerDTO(1, "Fabio", "123"),
@@ -18,7 +20,7 @@ fun Route.customerRouting() {
 
     route(path = "/customer") {
         get {
-            call.respond(customerList)
+            call.respond(service.getAll())
         }
         get("{id?}") {
             val id = call.parameters["id"]?.toInt() ?: return@get call.respondText(
@@ -33,8 +35,7 @@ fun Route.customerRouting() {
         }
         post {
             val customer = call.receive<CustomerDTO>()
-            customerList.add(customer)
-            call.respond(status = HttpStatusCode.Created, message = customer)
+            call.respond(status = HttpStatusCode.Created, message = service.create(customer))
         }
         delete("{id?}") {
             val id = call.parameters["id"]?.toInt() ?: return@delete call.respondText(
