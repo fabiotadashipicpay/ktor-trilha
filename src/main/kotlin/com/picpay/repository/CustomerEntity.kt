@@ -1,6 +1,5 @@
 package com.picpay.repository
 
-import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -10,6 +9,5 @@ class CustomerEntity(id: EntityID<Int>) : IntEntity(id) {
 
     var name by CustomerTable.name
     var document by CustomerTable.document
-
 }
 

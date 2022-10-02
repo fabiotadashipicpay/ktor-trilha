@@ -8,10 +8,18 @@ class CustomerService(
 ) {
     fun getAll() = repository.getAll()
 
+    fun getById(id: Int) = repository.findById(id)
+
     fun create(customerDTO: CustomerDTO) : CustomerDTO {
         customerDTO.document.apply {
             this.replace("[^0-9]", "")
         }
         return repository.insert(customerDTO)
+    }
+
+    fun update(id: Int, customerDTO: CustomerDTO): CustomerDTO? = repository.update(id, customerDTO)
+
+    fun delete(id: Int) {
+        repository.delete(id)
     }
 }
